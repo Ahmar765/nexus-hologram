@@ -1,7 +1,10 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { motion } from "framer-motion";
+import { useEffect, useState } from "react";
 import { Nav } from "@/components/Nav";
 import { HoloOrb } from "@/components/HoloOrb";
+import { HoloOrb3D } from "@/components/HoloOrb3D";
+import { ClientOnly } from "@/components/ClientOnly";
 import { Waveform } from "@/components/Waveform";
 
 export const Route = createFileRoute("/")({
@@ -17,17 +20,41 @@ export const Route = createFileRoute("/")({
 });
 
 function Index() {
+  const [active, setActive] = useState(false);
+  const [videoOpen, setVideoOpen] = useState(false);
+  const [toast, setToast] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (!toast) return;
+    const t = setTimeout(() => setToast(null), 2600);
+    return () => clearTimeout(t);
+  }, [toast]);
+
+  const activate = () => {
+    setActive((v) => {
+      const next = !v;
+      setToast(next ? "Aura activated · listening" : "Aura standby");
+      return next;
+    });
+  };
+
+  const scrollTo = (id: string) => {
+    document.getElementById(id)?.scrollIntoView({ behavior: "smooth", block: "start" });
+  };
+
   return (
     <div id="top" className="relative min-h-screen overflow-x-hidden text-foreground">
-      <Nav />
-      <Hero />
+      <Nav onActivate={activate} active={active} onNav={scrollTo} />
+      <Hero onActivate={activate} onWatch={() => setVideoOpen(true)} active={active} />
       <AiCore />
       <Interface />
       <Voice />
       <Ecosystem />
       <Vision />
-      <Features />
+      <Features onRequest={() => setToast("Access request sent · we'll be in touch")} />
       <Footer />
+      <VideoModal open={videoOpen} onClose={() => setVideoOpen(false)} />
+      <Toast text={toast} />
     </div>
   );
 }
@@ -41,7 +68,7 @@ function SectionLabel({ children }: { children: React.ReactNode }) {
   );
 }
 
-function Hero() {
+function Hero({ onActivate, onWatch, active }: { onActivate: () => void; onWatch: () => void; active: boolean }) {
   return (
     <section className="relative flex min-h-screen items-center justify-center overflow-hidden px-6 pt-24">
       <div className="absolute inset-0 grid-bg opacity-60" />
@@ -71,11 +98,11 @@ function Hero() {
             and quietly powerful.
           </p>
           <div className="mt-9 flex flex-wrap justify-center gap-3 lg:justify-start">
-            <button className="group relative overflow-hidden rounded-full px-7 py-3 text-sm font-semibold text-primary-foreground"
+            <button onClick={onActivate} className="group relative overflow-hidden rounded-full px-7 py-3 text-sm font-semibold text-primary-foreground transition-transform hover:scale-[1.03] active:scale-95"
               style={{ background: "var(--gradient-holo)", boxShadow: "var(--shadow-holo)" }}>
-              <span className="relative z-10">Activate Assistant</span>
+              <span className="relative z-10">{active ? "Deactivate Assistant" : "Activate Assistant"}</span>
             </button>
-            <button className="rounded-full border border-primary/40 bg-primary/5 px-7 py-3 text-sm font-semibold text-foreground transition-colors hover:bg-primary/10">
+            <button onClick={onWatch} className="rounded-full border border-primary/40 bg-primary/5 px-7 py-3 text-sm font-semibold text-foreground transition-colors hover:bg-primary/10">
               Watch Experience
             </button>
           </div>
@@ -97,12 +124,14 @@ function Hero() {
           initial={{ opacity: 0, scale: 0.9 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 1.2, ease: "easeOut" }}
-          className="relative animate-holo-float"
+          className="relative"
         >
-          <HoloOrb />
+          <ClientOnly fallback={<HoloOrb />}>
+            <HoloOrb3D className="mx-auto h-[440px] w-full max-w-[520px] sm:h-[520px]" />
+          </ClientOnly>
           {/* floating UI chips */}
           <FloatingChip className="-left-2 top-10" label="VISION" value="Active" />
-          <FloatingChip className="right-0 top-20" label="VOICE" value="Listening" />
+          <FloatingChip className="right-0 top-20" label="VOICE" value={active ? "Listening" : "Standby"} />
           <FloatingChip className="-left-4 bottom-16" label="CONTEXT" value="Living Room" />
           <FloatingChip className="right-2 bottom-10" label="SIGNAL" value="98%" />
         </motion.div>
@@ -163,7 +192,9 @@ function AiCore() {
               <span>Aura Cortex</span>
               <span className="text-primary">● LIVE</span>
             </div>
-            <HoloOrb />
+            <ClientOnly fallback={<HoloOrb />}>
+              <HoloOrb3D className="h-[360px] w-full" />
+            </ClientOnly>
             <div className="mt-6">
               <Waveform bars={56} />
             </div>
@@ -404,7 +435,7 @@ function Vision() {
   );
 }
 
-function Features() {
+function Features({ onRequest }: { onRequest: () => void }) {
   const items = [
     { t: "Voice Intelligence", d: "Speech that listens between the words." },
     { t: "Contextual AI", d: "Understands rooms, moments, intent." },
@@ -457,13 +488,13 @@ function Features() {
             building for the next interface of humanity.
           </p>
           <div className="mt-8 flex flex-wrap justify-center gap-3">
-            <button className="rounded-full px-7 py-3 text-sm font-semibold text-primary-foreground"
+            <button onClick={onRequest} className="rounded-full px-7 py-3 text-sm font-semibold text-primary-foreground transition-transform hover:scale-[1.03] active:scale-95"
               style={{ background: "var(--gradient-holo)", boxShadow: "var(--shadow-holo)" }}>
               Request Access
             </button>
-            <button className="rounded-full border border-primary/40 bg-primary/5 px-7 py-3 text-sm font-semibold hover:bg-primary/10">
+            <a href="https://en.wikipedia.org/wiki/Artificial_general_intelligence" target="_blank" rel="noreferrer" className="rounded-full border border-primary/40 bg-primary/5 px-7 py-3 text-sm font-semibold hover:bg-primary/10">
               Read Manifesto
-            </button>
+            </a>
           </div>
         </div>
       </div>
@@ -486,5 +517,53 @@ function Footer() {
         </div>
       </div>
     </footer>
+  );
+}
+
+function VideoModal({ open, onClose }: { open: boolean; onClose: () => void }) {
+  useEffect(() => {
+    if (!open) return;
+    const k = (e: KeyboardEvent) => e.key === "Escape" && onClose();
+    window.addEventListener("keydown", k);
+    return () => window.removeEventListener("keydown", k);
+  }, [open, onClose]);
+  if (!open) return null;
+  return (
+    <div className="fixed inset-0 z-[100] flex items-center justify-center px-4">
+      <div className="absolute inset-0 bg-background/80 backdrop-blur-md" onClick={onClose} />
+      <motion.div
+        initial={{ opacity: 0, scale: 0.95 }}
+        animate={{ opacity: 1, scale: 1 }}
+        className="glass-panel relative w-full max-w-3xl overflow-hidden rounded-3xl p-2"
+      >
+        <div className="flex items-center justify-between px-4 py-2 text-[10px] uppercase tracking-[0.3em] text-muted-foreground">
+          <span>Aura · Experience Reel</span>
+          <button onClick={onClose} className="rounded-full border border-primary/30 px-3 py-1 text-primary hover:bg-primary/10">Close</button>
+        </div>
+        <div className="relative aspect-video w-full overflow-hidden rounded-2xl bg-background">
+          <ClientOnly fallback={<div className="grid h-full w-full place-items-center text-muted-foreground">Loading…</div>}>
+            <HoloOrb3D className="h-full w-full" />
+          </ClientOnly>
+          <div className="pointer-events-none absolute inset-0 scanline" />
+          <div className="pointer-events-none absolute bottom-4 left-4 text-xs tracking-[0.3em] text-primary">▍ LIVE FEED · 04:12</div>
+        </div>
+      </motion.div>
+    </div>
+  );
+}
+
+function Toast({ text }: { text: string | null }) {
+  return (
+    <div className="pointer-events-none fixed bottom-6 left-1/2 z-[101] -translate-x-1/2">
+      <motion.div
+        initial={false}
+        animate={text ? { opacity: 1, y: 0 } : { opacity: 0, y: 12 }}
+        transition={{ duration: 0.25 }}
+        className="glass-panel rounded-full px-5 py-2.5 text-xs font-semibold tracking-wide text-foreground"
+      >
+        <span className="mr-2 inline-block h-1.5 w-1.5 animate-holo-pulse rounded-full bg-primary align-middle" />
+        {text}
+      </motion.div>
+    </div>
   );
 }
