@@ -70,7 +70,7 @@ function SectionLabel({ children }: { children: React.ReactNode }) {
 
 function Hero({ onActivate, onWatch, active }: { onActivate: () => void; onWatch: () => void; active: boolean }) {
   return (
-    <section className="relative flex min-h-screen items-center justify-center overflow-hidden px-6 pt-24">
+    <section className="relative flex min-h-screen items-center justify-center overflow-hidden px-4 pt-24 sm:px-6">
       <div className="absolute inset-0 grid-bg opacity-60" />
       <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-primary/60 to-transparent" />
       {/* scanline */}
@@ -87,34 +87,34 @@ function Hero({ onActivate, onWatch, active }: { onActivate: () => void; onWatch
           className="text-center lg:text-left"
         >
           <SectionLabel>Neural System // V.07</SectionLabel>
-          <h1 className="text-5xl font-semibold leading-[1.05] tracking-tight sm:text-6xl lg:text-7xl">
+          <h1 className="text-4xl font-semibold leading-[1.05] tracking-tight sm:text-6xl lg:text-7xl">
             Intelligence
             <br />
             <span className="text-holo">Beyond Screens.</span>
           </h1>
-          <p className="mx-auto mt-6 max-w-xl text-base leading-relaxed text-muted-foreground lg:mx-0">
+          <p className="mx-auto mt-6 max-w-xl text-sm leading-relaxed text-muted-foreground sm:text-base lg:mx-0">
             Meet AURA — the next-generation holographic AI assistant designed
             to transform the future of human interaction. Ambient, contextual,
             and quietly powerful.
           </p>
-          <div className="mt-9 flex flex-wrap justify-center gap-3 lg:justify-start">
-            <button onClick={onActivate} className="group relative overflow-hidden rounded-full px-7 py-3 text-sm font-semibold text-primary-foreground transition-transform hover:scale-[1.03] active:scale-95"
+          <div className="mt-8 flex flex-wrap justify-center gap-3 lg:justify-start">
+            <button onClick={onActivate} className="group relative overflow-hidden rounded-full px-5 py-3 text-xs font-semibold text-primary-foreground transition-transform hover:scale-[1.03] active:scale-95 sm:px-7 sm:text-sm"
               style={{ background: "var(--gradient-holo)", boxShadow: "var(--shadow-holo)" }}>
               <span className="relative z-10">{active ? "Deactivate Assistant" : "Activate Assistant"}</span>
             </button>
-            <button onClick={onWatch} className="rounded-full border border-primary/40 bg-primary/5 px-7 py-3 text-sm font-semibold text-foreground transition-colors hover:bg-primary/10">
+            <button onClick={onWatch} className="rounded-full border border-primary/40 bg-primary/5 px-5 py-3 text-xs font-semibold text-foreground transition-colors hover:bg-primary/10 sm:px-7 sm:text-sm">
               Watch Experience
             </button>
           </div>
-          <div className="mt-12 grid max-w-md grid-cols-3 gap-6 text-left lg:max-w-none">
+          <div className="mx-auto mt-10 grid max-w-md grid-cols-3 gap-4 text-left sm:gap-6 lg:mx-0 lg:max-w-none">
             {[
               ["99.4ms", "Neural latency"],
               ["18+", "Sensor inputs"],
               ["∞", "Ambient context"],
             ].map(([v, l]) => (
               <div key={l}>
-                <div className="text-2xl font-semibold text-foreground">{v}</div>
-                <div className="mt-1 text-[10px] uppercase tracking-[0.25em] text-muted-foreground">{l}</div>
+                <div className="text-xl font-semibold text-foreground sm:text-2xl">{v}</div>
+                <div className="mt-1 text-[9px] uppercase tracking-[0.2em] text-muted-foreground sm:text-[10px] sm:tracking-[0.25em]">{l}</div>
               </div>
             ))}
           </div>
@@ -127,13 +127,13 @@ function Hero({ onActivate, onWatch, active }: { onActivate: () => void; onWatch
           className="relative"
         >
           <ClientOnly fallback={<HoloOrb />}>
-            <HoloOrb3D className="mx-auto h-[440px] w-full max-w-[520px] sm:h-[520px]" />
+            <HoloOrb3D className="mx-auto h-[320px] w-full max-w-[520px] sm:h-[440px] lg:h-[520px]" />
           </ClientOnly>
-          {/* floating UI chips */}
-          <FloatingChip className="-left-2 top-10" label="VISION" value="Active" />
-          <FloatingChip className="right-0 top-20" label="VOICE" value={active ? "Listening" : "Standby"} />
-          <FloatingChip className="-left-4 bottom-16" label="CONTEXT" value="Living Room" />
-          <FloatingChip className="right-2 bottom-10" label="SIGNAL" value="98%" />
+          {/* floating UI chips — hidden on smallest screens to avoid overlap */}
+          <FloatingChip className="hidden sm:block -left-2 top-10" label="VISION" value="Active" />
+          <FloatingChip className="hidden sm:block right-0 top-20" label="VOICE" value={active ? "Listening" : "Standby"} />
+          <FloatingChip className="hidden sm:block -left-4 bottom-16" label="CONTEXT" value="Living Room" />
+          <FloatingChip className="hidden sm:block right-2 bottom-10" label="SIGNAL" value="98%" />
         </motion.div>
       </div>
     </section>
@@ -156,11 +156,11 @@ function FloatingChip({ className = "", label, value }: { className?: string; la
 
 function AiCore() {
   return (
-    <section id="core" className="relative px-6 py-32">
+    <section id="core" className="relative px-4 py-20 sm:px-6 sm:py-32">
       <div className="mx-auto grid max-w-7xl items-center gap-16 lg:grid-cols-2">
         <div>
           <SectionLabel>Neural Core</SectionLabel>
-          <h2 className="text-4xl font-semibold tracking-tight sm:text-5xl">
+          <h2 className="text-3xl font-semibold tracking-tight sm:text-4xl md:text-5xl">
             A mind that <span className="text-holo">breathes</span> with you.
           </h2>
           <p className="mt-5 max-w-lg text-muted-foreground">
@@ -187,13 +187,13 @@ function AiCore() {
 
         <div className="relative">
           <div className="absolute inset-0 -z-10 rounded-[3rem]" style={{ background: "var(--gradient-radial-glow)" }} />
-          <div className="glass-panel relative overflow-hidden rounded-3xl p-8 scanline">
+          <div className="glass-panel relative overflow-hidden rounded-3xl p-4 scanline sm:p-8">
             <div className="mb-6 flex items-center justify-between text-[10px] uppercase tracking-[0.3em] text-muted-foreground">
               <span>Aura Cortex</span>
               <span className="text-primary">● LIVE</span>
             </div>
             <ClientOnly fallback={<HoloOrb />}>
-              <HoloOrb3D className="h-[360px] w-full" />
+              <HoloOrb3D className="h-[260px] w-full sm:h-[360px]" />
             </ClientOnly>
             <div className="mt-6">
               <Waveform bars={56} />
@@ -218,11 +218,11 @@ function Interface() {
     { t: "Spaces", v: "Living Room", d: "Lighting · Cinematic" },
   ];
   return (
-    <section id="interface" className="relative px-6 py-32">
+    <section id="interface" className="relative px-4 py-20 sm:px-6 sm:py-32">
       <div className="mx-auto max-w-7xl">
         <div className="mx-auto max-w-2xl text-center">
           <SectionLabel>Holographic Interface</SectionLabel>
-          <h2 className="text-4xl font-semibold tracking-tight sm:text-5xl">
+          <h2 className="text-3xl font-semibold tracking-tight sm:text-4xl md:text-5xl">
             An operating system that <span className="text-holo">floats</span>.
           </h2>
           <p className="mt-5 text-muted-foreground">
@@ -231,7 +231,7 @@ function Interface() {
           </p>
         </div>
 
-        <div className="mt-16 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="mt-12 grid gap-4 sm:mt-16 sm:grid-cols-2 sm:gap-5 lg:grid-cols-3">
           {widgets.map((w, i) => (
             <motion.div
               key={w.t}
@@ -273,9 +273,9 @@ function Voice() {
     { from: "aura", text: "Queued. Want me to draft the session notes when we're done?" },
   ];
   return (
-    <section id="voice" className="relative px-6 py-32">
+    <section id="voice" className="relative px-4 py-20 sm:px-6 sm:py-32">
       <div className="mx-auto grid max-w-7xl gap-12 lg:grid-cols-[1.1fr_1fr]">
-        <div className="glass-panel scanline relative overflow-hidden rounded-3xl p-8">
+        <div className="glass-panel scanline relative overflow-hidden rounded-3xl p-4 sm:p-8">
           <div className="flex items-center justify-between text-[10px] uppercase tracking-[0.3em] text-muted-foreground">
             <span>Voice Channel · Encrypted</span>
             <span className="text-primary">● 48 kHz</span>
@@ -306,7 +306,7 @@ function Voice() {
 
         <div className="flex flex-col justify-center">
           <SectionLabel>Voice Intelligence</SectionLabel>
-          <h2 className="text-4xl font-semibold tracking-tight sm:text-5xl">
+          <h2 className="text-3xl font-semibold tracking-tight sm:text-4xl md:text-5xl">
             Speak naturally. <span className="text-holo">Be understood.</span>
           </h2>
           <p className="mt-5 max-w-lg text-muted-foreground">
@@ -337,16 +337,16 @@ function Ecosystem() {
     { label: "Wearables", pos: "top-1/3 left-4" },
   ];
   return (
-    <section id="ecosystem" className="relative px-6 py-32">
+    <section id="ecosystem" className="relative px-4 py-20 sm:px-6 sm:py-32">
       <div className="mx-auto max-w-7xl">
         <div className="mx-auto max-w-2xl text-center">
           <SectionLabel>Smart Ecosystem</SectionLabel>
-          <h2 className="text-4xl font-semibold tracking-tight sm:text-5xl">
+          <h2 className="text-3xl font-semibold tracking-tight sm:text-4xl md:text-5xl">
             One intelligence. <span className="text-holo">Every surface.</span>
           </h2>
         </div>
 
-        <div className="relative mx-auto mt-16 aspect-square w-full max-w-2xl">
+        <div className="relative mx-auto mt-12 aspect-square w-full max-w-2xl sm:mt-16">
           <div className="absolute inset-0 rounded-full border border-primary/20" />
           <div className="absolute inset-12 rounded-full border border-primary/15 animate-holo-spin-slow" />
           <div className="absolute inset-28 rounded-full border border-primary/10" />
@@ -386,11 +386,11 @@ function Ecosystem() {
 
 function Vision() {
   return (
-    <section id="vision" className="relative px-6 py-32">
+    <section id="vision" className="relative px-4 py-20 sm:px-6 sm:py-32">
       <div className="mx-auto grid max-w-7xl items-center gap-12 lg:grid-cols-2">
         <div>
           <SectionLabel>Future Vision</SectionLabel>
-          <h2 className="text-4xl font-semibold tracking-tight sm:text-5xl">
+          <h2 className="text-3xl font-semibold tracking-tight sm:text-4xl md:text-5xl">
             Meetings without <span className="text-holo">walls</span>.
           </h2>
           <p className="mt-5 max-w-lg text-muted-foreground">
@@ -445,15 +445,15 @@ function Features({ onRequest }: { onRequest: () => void }) {
     { t: "Neural Learning", d: "Quietly evolves with you, on device." },
   ];
   return (
-    <section className="relative px-6 py-32">
+    <section className="relative px-4 py-20 sm:px-6 sm:py-32">
       <div className="mx-auto max-w-7xl">
         <div className="mx-auto max-w-2xl text-center">
           <SectionLabel>Capabilities</SectionLabel>
-          <h2 className="text-4xl font-semibold tracking-tight sm:text-5xl">
+          <h2 className="text-3xl font-semibold tracking-tight sm:text-4xl md:text-5xl">
             Built from the <span className="text-holo">future</span>, backwards.
           </h2>
         </div>
-        <div className="mt-16 grid gap-5 md:grid-cols-2 lg:grid-cols-3">
+        <div className="mt-12 grid gap-4 sm:mt-16 sm:gap-5 md:grid-cols-2 lg:grid-cols-3">
           {items.map((it, i) => (
             <motion.div
               key={it.t}
@@ -477,10 +477,10 @@ function Features({ onRequest }: { onRequest: () => void }) {
           ))}
         </div>
 
-        <div className="relative mt-24 overflow-hidden rounded-3xl glass-panel scanline p-10 text-center sm:p-16">
+        <div className="relative mt-16 overflow-hidden rounded-3xl glass-panel scanline p-6 text-center sm:mt-24 sm:p-10 md:p-16">
           <div className="absolute inset-0 -z-10" style={{ background: "var(--gradient-radial-glow)" }} />
           <SectionLabel>Begin</SectionLabel>
-          <h3 className="mx-auto max-w-2xl text-3xl font-semibold tracking-tight sm:text-5xl">
+          <h3 className="mx-auto max-w-2xl text-2xl font-semibold tracking-tight sm:text-4xl md:text-5xl">
             Step into the <span className="text-holo">post-screen</span> era.
           </h3>
           <p className="mx-auto mt-4 max-w-xl text-muted-foreground">
